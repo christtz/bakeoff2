@@ -239,6 +239,9 @@ void mousePressed()
   }
 }
 
+void mouseMoved() {
+  letterClicked = false;
+}
 
 void nextTrial()
 {
