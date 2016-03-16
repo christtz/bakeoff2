@@ -229,7 +229,7 @@ void mousePressed()
   
   //If clicked on the space button
   if (didMouseClick(200+keyWidth, 200+keyTop+(3*keyHeight), 3*keyWidth, keyHeight)) {
-     currentTyped+="f";
+     currentTyped+=" ";
   }
 
   //If clicked on the done button
