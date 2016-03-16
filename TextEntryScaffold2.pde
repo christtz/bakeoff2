@@ -24,7 +24,8 @@ float keyHeight = sizeOfInputArea/6;
 float keyWidth = sizeOfInputArea/4;
 float keyTop = keyHeight*2;
 boolean letterClicked = false;
-  
+int currentBoxRow = -1;
+int currentBoxCol = -1;  
 //You can modify anything in here. This is just a basic implementation.
 void setup()
 {
@@ -86,7 +87,9 @@ void draw()
       float xco = 200+col*keyWidth;
       float yco = 200+keyTop+(row*keyHeight);
       fill(255, 255, 255);
+      stroke(0);
       rect(xco, yco, keyWidth, keyHeight); //draw left red button
+      noStroke();
       fill(0, 0, 0);
       textAlign(CENTER);
       text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
@@ -94,7 +97,9 @@ void draw()
     
     //Draw backspace
     fill(255, 255, 255);
+    stroke(0);
     rect(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight); 
+    noStroke();
     fill(0, 0, 0);
     textAlign(CENTER);
     text("del", 200+3*keyWidth+keyWidth/2, 200+keyTop+keyHeight+10); 
@@ -103,26 +108,57 @@ void draw()
     fill(255, 255, 255);
     stroke(0);
     rect(200+keyWidth, 200+keyTop+(3*keyHeight), 3*keyWidth, keyHeight); 
+    noStroke();
     fill(0, 0, 0);
     textAlign(CENTER);
     text("space", 200+2.5*keyWidth, 200+keyTop+3.5*keyHeight+10); 
 
     //Draw forward arrow
     fill(255, 255, 255);
+    stroke(0);
     rect(200+3*keyWidth, 200+keyTop+(2*keyHeight), keyWidth, keyHeight); 
+    noStroke();
     fill(0, 0, 0);
     textAlign(CENTER);
     text(">", 200+3.5*keyWidth, 200+keyTop+(2.5*keyHeight)+10); 
     
     text("" + currentLetter, 200+sizeOfInputArea/2, 200+sizeOfInputArea/5); //draw current letter
 
-    //if (letterClicked) boop(0);  
+    if (letterClicked) drawLetters();  
   }
 }
 
-void boop(int i) {
-  fill(255, 0, 0);
-  rect(0, 0, 300, 300);
+void drawLetters() {
+  int i = currentBoxRow*3 + currentBoxCol;
+  //Up
+  fill(0, 0, 255);
+  rect(200+currentBoxCol*keyWidth, 200+keyTop+((currentBoxRow-1)*keyHeight), keyWidth, keyHeight);
+  fill(0, 0, 0);
+  textAlign(CENTER);
+  text(alphabet[i].charAt(0), 200+currentBoxCol*keyWidth+keyWidth/2, 200+keyTop+((currentBoxRow-1)*keyHeight)+keyHeight/2+10);
+
+  //Down
+  fill(0, 0, 255);
+  rect(200+currentBoxCol*keyWidth, 200+keyTop+((currentBoxRow+1)*keyHeight), keyWidth, keyHeight);
+  fill(0, 0, 0);
+  textAlign(CENTER);
+  text(alphabet[i].charAt(2), 200+currentBoxCol*keyWidth+keyWidth/2, 200+keyTop+((currentBoxRow+1)*keyHeight)+keyHeight/2+10);
+
+  //Right
+  fill(0, 0, 255);
+  rect(200+(currentBoxCol+1)*keyWidth, 200+keyTop+(currentBoxRow*keyHeight), keyWidth, keyHeight);
+  fill(0, 0, 0);
+  textAlign(CENTER);
+  text(alphabet[i].charAt(1), 200+(currentBoxCol+1)*keyWidth+keyWidth/2, 200+keyTop+(currentBoxRow*keyHeight)+keyHeight/2+10);
+
+  //Left (if four letters)
+  if (alphabet[i].length() > 3) {
+    fill(0, 0, 255);
+    rect(200+(currentBoxCol-1)*keyWidth, 200+keyTop+(currentBoxRow*keyHeight), keyWidth, keyHeight);
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    text(alphabet[i].charAt(3), 200+(currentBoxCol-1)*keyWidth+keyWidth/2, 200+keyTop+(currentBoxRow*keyHeight)+keyHeight/2+10);    
+  }
 }
 
 
@@ -138,8 +174,14 @@ void mousePressed()
   if (didMouseClick(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight) && currentTyped.length()>0) {
     currentTyped = currentTyped.substring(0, currentTyped.length()-1);  
   }
-  if (didMouseClick(200, 200+keyTop, 10, 10)) {
+  //If trying to click on any letters (this doesn't include ">" or "<" obvi)
+  if (didMouseClick(200, 200+keyTop, 3*keyWidth, 3*keyHeight) && !didMouseClick(200+2*keyWidth, 200+keyTop+2*keyHeight, keyWidth, keyHeight)) {
     letterClicked = true;
+    //Figure out which textbox the click belongs to (assigns value 0-7)
+    int col = (int) ((mouseX-200) / keyWidth);
+    int row = (int) ((mouseY-(200+keyTop)) / keyHeight);
+    currentBoxRow = row;
+    currentBoxCol = col;
   }
   //if (didMouseClick(200, 200+sizeOfInputArea/2, sizeOfInputArea/2, sizeOfInputArea/2)) //check if click in left button
   //{
