@@ -104,11 +104,17 @@ void draw()
       int row = i / 3;
       float xco = 200+col*keyWidth;
       float yco = 200+keyTop+(row*keyHeight);
-      fill(255, 255, 255);
+      if (letterClicked)
+        fill(102, 102, 102, 0.8);
+      else
+        fill(102);
       stroke(0);
       rect(xco, yco, keyWidth, keyHeight); //draw left red button
       noStroke();
-      fill(0, 0, 0);
+      if (letterClicked)
+        fill(255, 255, 255);
+      else
+        fill(0, 0, 0);
       textAlign(CENTER);
       text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
     }
@@ -190,7 +196,8 @@ void mousePressed()
 {
   //If trying to delete 
   if (didMouseClick(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight) && currentTyped.length()>0) {
-    currentTyped = currentTyped.substring(0, currentTyped.length()-1);  
+    currentTyped = currentTyped.substring(0, currentTyped.length()-1);
+    currentLetter = ' ';
   }
   //If trying to click on any letters (this doesn't include ">" or "<" obvi)
   if (didMouseClick(200, 200+keyTop, 3*keyWidth, 3*keyHeight) && !didMouseClick(200+2*keyWidth, 200+keyTop+2*keyHeight, keyWidth, keyHeight)) {
@@ -230,6 +237,7 @@ void mousePressed()
   //If clicked on the space button
   if (didMouseClick(200+keyWidth, 200+keyTop+(3*keyHeight), 3*keyWidth, keyHeight)) {
      currentTyped+=" ";
+     currentLetter = ' ';
   }
 
   //If clicked on the done button
