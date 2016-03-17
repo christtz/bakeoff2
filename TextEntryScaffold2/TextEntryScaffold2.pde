@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.lang.Math;
 
 String[] phrases; //contains all of the phrases
-int totalTrialNum = 4; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
+int totalTrialNum = 2; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
 int currTrialNum = 0; // the current trial number (indexes into trials array above)
 float startTime = 0; // time starts when the first letter is entered
 float finishTime = 0; // records the time of when the final trial ends
@@ -264,7 +264,7 @@ void mousePressed()
   
   //If clicked on the space button
   if (didMouseClick(200+keyWidth, 200+keyTop+(3*keyHeight), 3*keyWidth, keyHeight)) {
-     currentTyped+=" ";
+     currentTyped = currentTyped.substring(0, cursorIdx) + " " + currentTyped.substring(cursorIdx);
      currentLetter = ' ';
      cursorIdx++;
   }
@@ -320,65 +320,160 @@ void mouseReleased() {
 void handleButtonPress() {
   float dx, dy;
   float angle;  // angular distance from mouse release to button click
-  if (letterClicked) {
-    System.out.println("button X: " + buttonPosX + "button Y: " + buttonPosX);
-    System.out.println("Release X: " + releasePosX + "Release Y: " + releasePosY);
-    dx = releasePosX - buttonPosX;
-    dy = releasePosY - buttonPosY;
-    angle = atan(dx/dy);
-    System.out.println("Theta: " + angle);
+  
+  dx = buttonPosX - releasePosX;
+  dy = buttonPosY - releasePosY;
+  // Letter has been clicked and distance moved is larger than button breadth
+  if (letterClicked && (abs(dx)+abs(dy)) > 20) {
+    angle = atan2(dy, dx);
+    
+    // The numebrs 0, +/-0.7, +/-2.7 represent diagonal boundary angles for our buttons
     if ((currentBoxRow == 0 && currentBoxCol == 0)) {
-      if( ((-3 * PI/4) <= angle) && (angle <= (-PI/4))) {
-        currentTyped += "a";
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "a" + currentTyped.substring(cursorIdx);
         currentLetter = 'a';
         cursorIdx++;
       }
-      else if( (-PI/4 < angle) && (angle < PI/4)) {
-        currentTyped += "c";
-        currentLetter = 'c';
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "b" + currentTyped.substring(cursorIdx);
+        currentLetter = 'b';
         cursorIdx++;
       }
-      else if( (PI/4 <= angle) && (angle <= 3 * PI/4)) {
-        currentTyped += "b";
-        currentLetter = 'b';
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "c" + currentTyped.substring(cursorIdx);
+        currentLetter = 'c';
         cursorIdx++;
       }
       
     }
     else if ((currentBoxRow == 0 && currentBoxCol == 1)) {
-      currentTyped += "d";
-      currentLetter = 'd';
-      cursorIdx++;
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "d" + currentTyped.substring(cursorIdx);
+        currentLetter = 'd';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "e" + currentTyped.substring(cursorIdx);
+        currentLetter = 'e';
+        cursorIdx++;
+      }
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "f" + currentTyped.substring(cursorIdx);
+        currentLetter = 'f';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 0 && currentBoxCol == 2)) {
-      currentTyped += "g";
-      currentLetter = 'g';
-      cursorIdx++;
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "g" + currentTyped.substring(cursorIdx);
+        currentLetter = 'g';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "h" + currentTyped.substring(cursorIdx);
+        currentLetter = 'h';
+        cursorIdx++;
+      }
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "i" + currentTyped.substring(cursorIdx);
+        currentLetter = 'i';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 0)) {
-      currentTyped += "j";
-      currentLetter = 'j';
-      cursorIdx++;
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "j" + currentTyped.substring(cursorIdx);
+        currentLetter = 'j';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "k" + currentTyped.substring(cursorIdx);
+        currentLetter = 'k';
+        cursorIdx++;
+      }
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "l" + currentTyped.substring(cursorIdx);
+        currentLetter = 'l';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 1)) {
-      currentTyped += "m";
-      currentLetter = 'm';
-      cursorIdx++;
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "m" + currentTyped.substring(cursorIdx);
+        currentLetter = 'm';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "n" + currentTyped.substring(cursorIdx);
+        currentLetter = 'n';
+        cursorIdx++;
+      }
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "o" + currentTyped.substring(cursorIdx);
+        currentLetter = 'o';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 2)) {
-      currentTyped += "p";
-      currentLetter = 'p';
-      cursorIdx++;
+      if( abs(angle) < 0.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "s" + currentTyped.substring(cursorIdx);
+        currentLetter = 's';
+        cursorIdx++;
+      }
+      else if( angle > 0.7 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "p" + currentTyped.substring(cursorIdx);
+        currentLetter = 'p';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "q" + currentTyped.substring(cursorIdx);
+        currentLetter = 'q';
+        cursorIdx++;
+      }
+      else if( (angle < -0.7) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "r" + currentTyped.substring(cursorIdx);
+        currentLetter = 'r';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 2 && currentBoxCol == 0)) {
-      currentTyped += "t";
-      currentLetter = 't';
-      cursorIdx++;
+      if( angle > 0 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "t" + currentTyped.substring(cursorIdx);
+        currentLetter = 't';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "u" + currentTyped.substring(cursorIdx);
+        currentLetter = 'u';
+        cursorIdx++;
+      }
+      else if( (angle < 0) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "v" + currentTyped.substring(cursorIdx);
+        currentLetter = 'v';
+        cursorIdx++;
+      }
     }
     else if ((currentBoxRow == 2 && currentBoxCol == 1)) {
-      currentTyped += "w";
-      currentLetter = 'w';
-      cursorIdx++;
+      if( abs(angle) < 0.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "z" + currentTyped.substring(cursorIdx);
+        currentLetter = 'z';
+        cursorIdx++;
+      }
+      else if( angle > 0.7 && angle < 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "w" + currentTyped.substring(cursorIdx);
+        currentLetter = 'w';
+        cursorIdx++;
+      }
+      else if(abs(angle) > 2.7) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "x" + currentTyped.substring(cursorIdx);
+        currentLetter = 'x';
+        cursorIdx++;
+      }
+      else if( (angle < -0.7) && (angle > (- 2.7))) {
+        currentTyped = currentTyped.substring(0, cursorIdx) + "y" + currentTyped.substring(cursorIdx);
+        currentLetter = 'y';
+        cursorIdx++;
+      }
     }
     
   }
