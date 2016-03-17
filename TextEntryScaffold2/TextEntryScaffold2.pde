@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Collections;
+import java.lang.Math;
 
 String[] phrases; //contains all of the phrases
 int totalTrialNum = 4; //the total number of phrases to be tested - set this low for testing. Might be ~10 for the real bakeoff!
@@ -29,6 +30,7 @@ int currentBoxCol = -1;
 // For the Cursor
 int blinkTime;
 float cursorPos;
+int cursorIdx = 0; 
 boolean blinkOn;
 
 //You can modify anything in here. This is just a basic implementation.
@@ -87,7 +89,7 @@ void draw()
     text("Target:   " + currentPhrase, 70, 100); //draw the target string
     text("Entered: " + currentTyped, 70, 140); //draw what the user has entered thus far 
     if (blinkOn) {
-      cursorPos = 70 + textWidth("Entered: " + currentTyped);
+      cursorPos = 70 + textWidth("Entered: " + currentTyped.substring(0, cursorIdx));
       stroke(255);
       line(cursorPos, 125, cursorPos, 140);
     }
@@ -196,8 +198,8 @@ void mousePressed()
 {
   //If trying to delete 
   if (didMouseClick(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight) && currentTyped.length()>0) {
-    currentTyped = currentTyped.substring(0, currentTyped.length()-1);
-    currentLetter = ' ';
+    currentTyped = currentTyped.substring(0, cursorIdx-1) + currentTyped.substring(cursorIdx);
+    cursorIdx = Math.max(cursorIdx-1, 0);
   }
   //If trying to click on any letters (this doesn't include ">" or "<" obvi)
   if (didMouseClick(200, 200+keyTop, 3*keyWidth, 3*keyHeight) && !didMouseClick(200+2*keyWidth, 200+keyTop+2*keyHeight, keyWidth, keyHeight)) {
@@ -238,6 +240,7 @@ void mousePressed()
   if (didMouseClick(200+keyWidth, 200+keyTop+(3*keyHeight), 3*keyWidth, keyHeight)) {
      currentTyped+=" ";
      currentLetter = ' ';
+     cursorIdx++;
   }
 
   //If clicked on the done button
@@ -245,6 +248,19 @@ void mousePressed()
   {
     nextTrial(); //if so, advance to next trial
   }
+  
+  //If clicked on the < button
+  if (didMouseClick(200+2*keyWidth, 200+keyTop+(2*keyHeight), keyWidth, keyHeight)) {
+     currentLetter = ' ';
+     cursorIdx = Math.max(cursorIdx-1, 0);
+  }
+  
+  //If clicked on the > button
+  if (didMouseClick(200+3*keyWidth, 200+keyTop+(2*keyHeight), keyWidth, keyHeight)) {
+     currentLetter = ' ';
+     cursorIdx = Math.min(cursorIdx+1, currentTyped.length());
+  }
+
 }
 
 void mouseMoved() {
@@ -300,6 +316,7 @@ void nextTrial()
 
   lastTime = millis(); //record the time of when this trial ended
   currentTyped = ""; //clear what is currently typed preparing for next trial
+  cursorIdx = 0; 
   currentPhrase = phrases[currTrialNum]; // load the next phrase!
   //currentPhrase = "abc"; // uncomment this to override the test phrase (useful for debugging)
 }
