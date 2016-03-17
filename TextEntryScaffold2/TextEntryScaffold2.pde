@@ -13,7 +13,7 @@ float lettersExpectedTotal = 0; //a running total of the number of letters expec
 float errorsTotal = 0; //a running total of the number of errors (when hitting next)
 String currentPhrase = ""; //the current target phrase
 String currentTyped = ""; //what the user has typed so far
-final int DPIofYourDeviceScreen = 294; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
+final int DPIofYourDeviceScreen = 323; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
                                       //http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density
 final float sizeOfInputArea = DPIofYourDeviceScreen*1; //aka, 1.0 inches square!
 
@@ -243,6 +243,9 @@ void mousePressed()
      cursorIdx++;
   }
 
+   // Handle Button Press Function. 
+   handleButtonPress(); 
+   
   //If clicked on the done button
   if (didMouseClick(200, 200+keyTop+(3*keyHeight), keyWidth, keyHeight)) //check if click is in done button
   {
@@ -263,8 +266,57 @@ void mousePressed()
 
 }
 
+/* When mouse has been pressed and then released */
+void mouseClicked() {
+}
+
+/* When mouse has been pressed and then moved */
+void mouseDragged() {
+
+}
+
+/* When mouse has been pressed, dragged and then released */
 void mouseMoved() {
+  
+}
+
+void mouseReleased() {
   letterClicked = false;
+}
+
+void handleButtonPress() {
+  if ((currentBoxRow == 0 && currentBoxCol == 0) && (letterClicked)) {
+    currentTyped += "a";
+    currentLetter = 'a';
+  }
+  else if ((currentBoxRow == 0 && currentBoxCol == 1) && (letterClicked)) {
+    currentTyped += "d";
+    currentLetter = 'd';
+  }
+  else if ((currentBoxRow == 0 && currentBoxCol == 2) && (letterClicked)) {
+    currentTyped += "g";
+    currentLetter = 'g';
+  }
+  else if ((currentBoxRow == 1 && currentBoxCol == 0) && (letterClicked)) {
+    currentTyped += "j";
+    currentLetter = 'j';
+  }
+  else if ((currentBoxRow == 1 && currentBoxCol == 1) && (letterClicked)) {
+    currentTyped += "m";
+    currentLetter = 'm';
+  }
+  else if ((currentBoxRow == 1 && currentBoxCol == 2) && (letterClicked)) {
+    currentTyped += "p";
+    currentLetter = 'p';
+  }
+  else if ((currentBoxRow == 2 && currentBoxCol == 0) && (letterClicked)) {
+    currentTyped += "t";
+    currentLetter = 't';
+  }
+  else if ((currentBoxRow == 2 && currentBoxCol == 1) && (letterClicked)) {
+    currentTyped += "w";
+    currentLetter = 'w';
+  }
 }
 
 void nextTrial()
