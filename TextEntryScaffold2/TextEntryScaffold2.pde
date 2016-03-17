@@ -13,7 +13,7 @@ float lettersExpectedTotal = 0; //a running total of the number of letters expec
 float errorsTotal = 0; //a running total of the number of errors (when hitting next)
 String currentPhrase = ""; //the current target phrase
 String currentTyped = ""; //what the user has typed so far
-final int DPIofYourDeviceScreen = 323; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
+final int DPIofYourDeviceScreen = 294; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
                                       //http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density
 final float sizeOfInputArea = DPIofYourDeviceScreen*1; //aka, 1.0 inches square!
 
@@ -32,6 +32,9 @@ int blinkTime;
 float cursorPos;
 int cursorIdx = 0; 
 boolean blinkOn;
+
+// For when Mouse is released
+float releasePosX, releasePosY, buttonPosX, buttonPosY;
 
 //You can modify anything in here. This is just a basic implementation.
 void setup()
@@ -101,14 +104,14 @@ void draw()
     textAlign(CENTER);
     
     //Draw the letters, left arrow, and done buttons
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 8; i++) {
       int col = i % 3;
       int row = i / 3;
       float xco = 200+col*keyWidth;
       float yco = 200+keyTop+(row*keyHeight);
       if (letterClicked)
         fill(102, 102, 102, 0.8);
-      else
+      else 
         fill(102);
       stroke(0);
       rect(xco, yco, keyWidth, keyHeight); //draw left red button
@@ -120,6 +123,24 @@ void draw()
       textAlign(CENTER);
       text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
     }
+    
+    //Draw left arrow      
+    fill(255, 255, 255);
+    stroke(0);
+    rect(200+2*keyWidth, 200+keyTop+(2*keyHeight), keyWidth, keyHeight); //draw left red button
+    noStroke();
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    text("<", 200+2.5*keyWidth, 200+keyTop+(2.5*keyHeight)+10);
+    
+    //Draw done button
+    fill(255, 0, 0);
+    stroke(0);
+    rect(200, 200+keyTop+(3*keyHeight), keyWidth, keyHeight); //draw left red button
+    noStroke();
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    text("done", 200+0.5*keyWidth, 200+keyTop+(3.5*keyHeight)+10);
     
     //Draw backspace
     fill(255, 255, 255);
@@ -198,12 +219,17 @@ void mousePressed()
 {
   //If trying to delete 
   if (didMouseClick(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight) && currentTyped.length()>0) {
-    currentTyped = currentTyped.substring(0, cursorIdx-1) + currentTyped.substring(cursorIdx);
+    if (cursorIdx > 0) {
+      currentTyped = currentTyped.substring(0, cursorIdx-1) + currentTyped.substring(cursorIdx);
+    }
     cursorIdx = Math.max(cursorIdx-1, 0);
   }
   //If trying to click on any letters (this doesn't include ">" or "<" obvi)
   if (didMouseClick(200, 200+keyTop, 3*keyWidth, 3*keyHeight) && !didMouseClick(200+2*keyWidth, 200+keyTop+2*keyHeight, keyWidth, keyHeight)) {
     letterClicked = true;
+    // Get Button Click positions. 
+    buttonPosX = mouseX;
+    buttonPosY = mouseY;
     //Figure out which textbox the click belongs to (assigns value 0-7)
     int col = (int) ((mouseX-200) / keyWidth);
     int row = (int) ((mouseY-(200+keyTop)) / keyHeight);
@@ -242,9 +268,8 @@ void mousePressed()
      currentLetter = ' ';
      cursorIdx++;
   }
-
-   // Handle Button Press Function. 
-   handleButtonPress(); 
+  
+  
    
   //If clicked on the done button
   if (didMouseClick(200, 200+keyTop+(3*keyHeight), keyWidth, keyHeight)) //check if click is in done button
@@ -272,7 +297,8 @@ void mouseClicked() {
 
 /* When mouse has been pressed and then moved */
 void mouseDragged() {
-
+  if (letterClicked) {
+  }
 }
 
 /* When mouse has been pressed, dragged and then released */
@@ -281,45 +307,80 @@ void mouseMoved() {
 }
 
 void mouseReleased() {
-  letterClicked = false;
+  if (letterClicked) {
+    releasePosX = mouseX;
+    releasePosY = mouseY;
+    // Handle Button Press Function. 
+    handleButtonPress(); 
+    letterClicked = false;
+  }
 }
 
+
 void handleButtonPress() {
+  float dx, dy;
+  float angle;  // angular distance from mouse release to button click
   if (letterClicked) {
-      
+    System.out.println("button X: " + buttonPosX + "button Y: " + buttonPosX);
+    System.out.println("Release X: " + releasePosX + "Release Y: " + releasePosY);
+    dx = releasePosX - buttonPosX;
+    dy = releasePosY - buttonPosY;
+    angle = atan(dx/dy);
+    System.out.println("Theta: " + angle);
     if ((currentBoxRow == 0 && currentBoxCol == 0)) {
-      currentTyped += "a";
-      currentLetter = 'a';
+      if( ((-3 * PI/4) <= angle) && (angle <= (-PI/4))) {
+        currentTyped += "a";
+        currentLetter = 'a';
+        cursorIdx++;
+      }
+      else if( (-PI/4 < angle) && (angle < PI/4)) {
+        currentTyped += "c";
+        currentLetter = 'c';
+        cursorIdx++;
+      }
+      else if( (PI/4 <= angle) && (angle <= 3 * PI/4)) {
+        currentTyped += "b";
+        currentLetter = 'b';
+        cursorIdx++;
+      }
+      
     }
     else if ((currentBoxRow == 0 && currentBoxCol == 1)) {
       currentTyped += "d";
       currentLetter = 'd';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 0 && currentBoxCol == 2)) {
       currentTyped += "g";
       currentLetter = 'g';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 0)) {
       currentTyped += "j";
       currentLetter = 'j';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 1)) {
       currentTyped += "m";
       currentLetter = 'm';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 1 && currentBoxCol == 2)) {
       currentTyped += "p";
       currentLetter = 'p';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 2 && currentBoxCol == 0)) {
       currentTyped += "t";
       currentLetter = 't';
+      cursorIdx++;
     }
     else if ((currentBoxRow == 2 && currentBoxCol == 1)) {
       currentTyped += "w";
       currentLetter = 'w';
+      cursorIdx++;
     }
-    cursorIdx++;
+    
   }
 }
 
