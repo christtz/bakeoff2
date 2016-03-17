@@ -285,37 +285,41 @@ void mouseReleased() {
 }
 
 void handleButtonPress() {
-  if ((currentBoxRow == 0 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "a";
-    currentLetter = 'a';
-  }
-  else if ((currentBoxRow == 0 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "d";
-    currentLetter = 'd';
-  }
-  else if ((currentBoxRow == 0 && currentBoxCol == 2) && (letterClicked)) {
-    currentTyped += "g";
-    currentLetter = 'g';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "j";
-    currentLetter = 'j';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "m";
-    currentLetter = 'm';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 2) && (letterClicked)) {
-    currentTyped += "p";
-    currentLetter = 'p';
-  }
-  else if ((currentBoxRow == 2 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "t";
-    currentLetter = 't';
-  }
-  else if ((currentBoxRow == 2 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "w";
-    currentLetter = 'w';
+  if (letterClicked) {
+      
+    if ((currentBoxRow == 0 && currentBoxCol == 0)) {
+      currentTyped += "a";
+      currentLetter = 'a';
+    }
+    else if ((currentBoxRow == 0 && currentBoxCol == 1)) {
+      currentTyped += "d";
+      currentLetter = 'd';
+    }
+    else if ((currentBoxRow == 0 && currentBoxCol == 2)) {
+      currentTyped += "g";
+      currentLetter = 'g';
+    }
+    else if ((currentBoxRow == 1 && currentBoxCol == 0)) {
+      currentTyped += "j";
+      currentLetter = 'j';
+    }
+    else if ((currentBoxRow == 1 && currentBoxCol == 1)) {
+      currentTyped += "m";
+      currentLetter = 'm';
+    }
+    else if ((currentBoxRow == 1 && currentBoxCol == 2)) {
+      currentTyped += "p";
+      currentLetter = 'p';
+    }
+    else if ((currentBoxRow == 2 && currentBoxCol == 0)) {
+      currentTyped += "t";
+      currentLetter = 't';
+    }
+    else if ((currentBoxRow == 2 && currentBoxCol == 1)) {
+      currentTyped += "w";
+      currentLetter = 'w';
+    }
+    cursorIdx++;
   }
 }
 
