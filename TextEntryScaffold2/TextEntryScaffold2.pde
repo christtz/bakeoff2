@@ -13,7 +13,7 @@ float lettersExpectedTotal = 0; //a running total of the number of letters expec
 float errorsTotal = 0; //a running total of the number of errors (when hitting next)
 String currentPhrase = ""; //the current target phrase
 String currentTyped = ""; //what the user has typed so far
-final int DPIofYourDeviceScreen = 323; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
+final int DPIofYourDeviceScreen = 294; //you will need to look up the DPI or PPI of your device to make sure you get the right scale!!
                                       //http://en.wikipedia.org/wiki/List_of_displays_by_pixel_density
 final float sizeOfInputArea = DPIofYourDeviceScreen*1; //aka, 1.0 inches square!
 
@@ -101,14 +101,14 @@ void draw()
     textAlign(CENTER);
     
     //Draw the letters, left arrow, and done buttons
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 8; i++) {
       int col = i % 3;
       int row = i / 3;
       float xco = 200+col*keyWidth;
       float yco = 200+keyTop+(row*keyHeight);
       if (letterClicked)
         fill(102, 102, 102, 0.8);
-      else
+      else 
         fill(102);
       stroke(0);
       rect(xco, yco, keyWidth, keyHeight); //draw left red button
@@ -120,6 +120,24 @@ void draw()
       textAlign(CENTER);
       text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
     }
+    
+    //Draw left arrow      
+    fill(255, 255, 255);
+    stroke(0);
+    rect(200+2*keyWidth, 200+keyTop+(2*keyHeight), keyWidth, keyHeight); //draw left red button
+    noStroke();
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    text("<", 200+2.5*keyWidth, 200+keyTop+(2.5*keyHeight)+10);
+    
+    //Draw done button
+    fill(255, 0, 0);
+    stroke(0);
+    rect(200, 200+keyTop+(3*keyHeight), keyWidth, keyHeight); //draw left red button
+    noStroke();
+    fill(0, 0, 0);
+    textAlign(CENTER);
+    text("done", 200+0.5*keyWidth, 200+keyTop+(3.5*keyHeight)+10);
     
     //Draw backspace
     fill(255, 255, 255);
@@ -198,7 +216,9 @@ void mousePressed()
 {
   //If trying to delete 
   if (didMouseClick(200+3*keyWidth, 200+keyTop, keyWidth, 2*keyHeight) && currentTyped.length()>0) {
-    currentTyped = currentTyped.substring(0, cursorIdx-1) + currentTyped.substring(cursorIdx);
+    if (cursorIdx > 0) {
+      currentTyped = currentTyped.substring(0, cursorIdx-1) + currentTyped.substring(cursorIdx);
+    }
     cursorIdx = Math.max(cursorIdx-1, 0);
   }
   //If trying to click on any letters (this doesn't include ">" or "<" obvi)
@@ -243,9 +263,6 @@ void mousePressed()
      cursorIdx++;
   }
 
-   // Handle Button Press Function. 
-   handleButtonPress(); 
-   
   //If clicked on the done button
   if (didMouseClick(200, 200+keyTop+(3*keyHeight), keyWidth, keyHeight)) //check if click is in done button
   {
@@ -266,57 +283,8 @@ void mousePressed()
 
 }
 
-/* When mouse has been pressed and then released */
-void mouseClicked() {
-}
-
-/* When mouse has been pressed and then moved */
-void mouseDragged() {
-
-}
-
-/* When mouse has been pressed, dragged and then released */
 void mouseMoved() {
-  
-}
-
-void mouseReleased() {
   letterClicked = false;
-}
-
-void handleButtonPress() {
-  if ((currentBoxRow == 0 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "a";
-    currentLetter = 'a';
-  }
-  else if ((currentBoxRow == 0 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "d";
-    currentLetter = 'd';
-  }
-  else if ((currentBoxRow == 0 && currentBoxCol == 2) && (letterClicked)) {
-    currentTyped += "g";
-    currentLetter = 'g';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "j";
-    currentLetter = 'j';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "m";
-    currentLetter = 'm';
-  }
-  else if ((currentBoxRow == 1 && currentBoxCol == 2) && (letterClicked)) {
-    currentTyped += "p";
-    currentLetter = 'p';
-  }
-  else if ((currentBoxRow == 2 && currentBoxCol == 0) && (letterClicked)) {
-    currentTyped += "t";
-    currentLetter = 't';
-  }
-  else if ((currentBoxRow == 2 && currentBoxCol == 1) && (letterClicked)) {
-    currentTyped += "w";
-    currentLetter = 'w';
-  }
 }
 
 void nextTrial()
