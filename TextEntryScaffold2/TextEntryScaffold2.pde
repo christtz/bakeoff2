@@ -121,7 +121,20 @@ void draw()
       else
         fill(0, 0, 0);
       textAlign(CENTER);
-      text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
+      if(alphabet[i].length() == 3) { // draw 3-letter layout
+        text(alphabet[i].charAt(0), xco+keyWidth/2, yco+keyHeight/2-8);
+        text(alphabet[i].charAt(1), xco+keyWidth/2+22, yco+keyHeight/2+5);
+        text(alphabet[i].charAt(2), xco+keyWidth/2, yco+keyHeight/2+18);
+      }
+      else if(alphabet[i].length() == 4){ // draw 4-letter layout
+        text(alphabet[i].charAt(0), xco+keyWidth/2, yco+keyHeight/2-8);
+        text(alphabet[i].charAt(1), xco+keyWidth/2+22, yco+keyHeight/2+5);
+        text(alphabet[i].charAt(2), xco+keyWidth/2, yco+keyHeight/2+18);
+        text(alphabet[i].charAt(3), xco+keyWidth/2-22, yco+keyHeight/2+5);
+      }
+      else { // normal layout
+        text(alphabet[i], xco+keyWidth/2, yco+keyHeight/2+10);
+      }
     }
     
     //Draw left arrow      
